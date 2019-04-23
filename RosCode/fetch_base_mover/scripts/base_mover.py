@@ -4,6 +4,7 @@ import rospy
 import math
 import time
 import copy
+import sys
 from scipy.spatial.transform import Rotation
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
@@ -73,17 +74,20 @@ class RobotMover():
 
 
 def main():
+	if(len(sys.argv) < 3):
+		print("USAGE: base_mover.py <angular movement> <linear movement>")
+		return
 	rospy.init_node('robot_mover')
 	pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 	#set linear speed in meters/sec and angular speed in radians/sec
 	mover = RobotMover(pub, 0.2, 0.5)
 	sub = rospy.Subscriber('/odom', Odometry, callback=mover.odom_update)
 	
-	time.sleep(0.2)
-	#rotate -1 radians
-	#mover.move_angular(-1.0)
-	#move forward 1 meters
-	mover.move_linear(1.0)
+	time.sleep(0.1)
+	#rotate 
+	mover.move_angular(float(sys.argv[1]))
+	#move forward
+	mover.move_linear(float(sys.argv[2]))
 
 if __name__ == '__main__':
 	main()
