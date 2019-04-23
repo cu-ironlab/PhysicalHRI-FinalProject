@@ -1,0 +1,3 @@
+<launch>
+	<node name="base_mover" type="base_mover.py" pkg="fetch_base_mover" args="-0.48 1.25" />
+</launch>
