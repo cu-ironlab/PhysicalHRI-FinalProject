@@ -13,9 +13,9 @@ public class DrawArc : MonoBehaviour {
         linerenderer.positionCount = numberOfPoints;
 
         for (int i = 0; i < numberOfPoints; i++) {
-            float angle = i * ((Mathf.PI / 180) * arcDegrees) / numberOfPoints;
+            float angle = (i * ((Mathf.PI / 180) * arcDegrees) / numberOfPoints) - this.transform.eulerAngles.y / 32;
             Vector3 pos = new Vector3(Mathf.Cos(angle), this.transform.localPosition.y, Mathf.Sin(angle)) * ringRadius;
-            pos = new Vector3(pos.x + this.transform.position.x, pos.y, pos.z + this.transform.position.z);
+            pos = new Vector3(pos.x + this.transform.position.x, pos.y * 2, pos.z + this.transform.position.z);
             linerenderer.SetPosition(i, pos);
         }
     }

@@ -6,9 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/NearProximity.unity
+    path: Assets/Scenes/FarProximity.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 0
-    path: Assets/Scenes/FarProximity.unity
+    path: Assets/__DELETED_GUID_Trash/fcffa560dfa76c6489f6b4c7fb452ecd
     guid: fcffa560dfa76c6489f6b4c7fb452ecd
+  - enabled: 0
+    path: Assets/Scenes/NearProximity.unity
+    guid: 8d498d530881a5543a7ea1f115887a5b
   m_configObjects: {}

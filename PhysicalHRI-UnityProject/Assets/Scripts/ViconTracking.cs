@@ -23,7 +23,7 @@ public class ViconTracking : MonoBehaviour
     bool isFirstUpdate = true;
     bool hasHololensLocation = false;
 
-    static string holoLensIP = "192.168.10.126";
+    static string holoLensIP = "192.168.10.127";
     DatagramSocket socket = new DatagramSocket();
     HostName host = new HostName(holoLensIP);
 #endif
