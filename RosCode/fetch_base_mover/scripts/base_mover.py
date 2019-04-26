@@ -81,7 +81,7 @@ def main():
 	rospy.init_node('robot_mover')
 	pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 	#set linear speed in meters/sec and angular speed in radians/sec
-	mover = RobotMover(pub, 0.2, 0.5)
+	mover = RobotMover(pub, 0.3, 0.5)
 	sub = rospy.Subscriber('/vicon/fetch/fetch', TransformStamped, callback=mover.odom_update)
 	
 	time.sleep(0.1)
