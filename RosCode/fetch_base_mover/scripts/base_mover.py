@@ -7,6 +7,7 @@ import copy
 import sys
 from scipy.spatial.transform import Rotation
 from geometry_msgs.msg import Twist
+from geometry_msgs.msg import TransformStamped
 from nav_msgs.msg import Odometry
 
 class RobotMover():
@@ -62,9 +63,9 @@ class RobotMover():
 		self.pub.publish(twist)
 
 	def odom_update(self, odom_msg):
-		pose = odom_msg.pose.pose
-		self.pose =[pose.position.x, pose.position.y]
-		self.angle = [pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w]
+		pose = odom_msg.transform
+		self.pose =[pose.translation.x, pose.translation.y]
+		self.angle = [pose.rotation.x, pose.rotation.y, pose.rotation.z, pose.rotation.w]
 
 	def print_state(self):
 		print("Position: [x: "+str(self.pose[0])+", y: "+str(self.pose[1])+"]")
@@ -81,7 +82,7 @@ def main():
 	pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 	#set linear speed in meters/sec and angular speed in radians/sec
 	mover = RobotMover(pub, 0.2, 0.5)
-	sub = rospy.Subscriber('/odom', Odometry, callback=mover.odom_update)
+	sub = rospy.Subscriber('/vicon/fetch/fetch', TransformStamped, callback=mover.odom_update)
 	
 	time.sleep(0.1)
 	#rotate 
