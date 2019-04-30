@@ -5,7 +5,7 @@ import math
 import time
 import copy
 import sys
-from scipy.spatial.transform import Rotation
+from pyquaternion import Quaternion
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import TransformStamped
 from nav_msgs.msg import Odometry
@@ -37,20 +37,19 @@ class RobotMover():
 		if(abs(z_val) > 1):
 			print("WARNING: rotation greater than 1 radian requested. Trimming to 1 radian")
 			z_val = math.copysign(1, z_val)
-		z_val = z_val * math.pi #put in radians
+		z_val = z_val * math.pi
 		if(z_val > 0):
 			speed_command = self.a_speed
 		else:
 			speed_command = -1*self.a_speed
-		rot = Rotation.from_quat(self.angle)
-		last_angle = rot.as_euler('xyz')
+		last_angle = Quaternion(self.angle[3], self.angle[0], self.angle[1], self.angle[2])
 		angle_dist = 0
 		while(angle_dist < (abs(z_val) - self.a_speed/10.0)):
 			self.move(0,speed_command)
 			self.r.sleep()
-			rot = Rotation.from_quat(self.angle)
-			new_angle = rot.as_euler('xyz')
-			new_angle_dist = abs(abs(new_angle[2]) - abs(last_angle[2]))
+			new_angle = Quaternion(self.angle[3], self.angle[0], self.angle[1], self.angle[2])
+			new_angle_dist = abs(new_angle.radians - last_angle.radians)
+			new_angle_dist = min(new_angle_dist, math.pi*2.0 - new_angle_dist)
 			angle_dist += new_angle_dist
 			last_angle = new_angle
 		self.move(0,0)
@@ -65,6 +64,9 @@ class RobotMover():
 	def odom_update(self, odom_msg):
 		pose = odom_msg.transform
 		self.pose =[pose.translation.x, pose.translation.y]
+		#check for jumping rotation
+		if(abs(pose.rotation.x) > 0.1 or abs(pose.rotation.y) > 0.1):
+			return
 		self.angle = [pose.rotation.x, pose.rotation.y, pose.rotation.z, pose.rotation.w]
 
 	def print_state(self):
